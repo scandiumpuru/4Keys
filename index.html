@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FGHJ Rhythm</title><link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main class="app">
+  <header class="topbar"><div><div class="eyebrow">FOUR-LANE RHYTHM GAME</div><h1>FGHJ <span>RHYTHM</span></h1></div>
+    <div class="top-actions"><label class="file-button" for="chartFile">譜面JSONを読み込む</label><input id="chartFile" type="file" accept=".json,application/json"><button id="editorToggle" class="secondary">譜面を編集</button></div>
+  </header>
+  <section class="hud">
+    <div class="stat"><span>SCORE</span><strong id="score">0000000</strong></div><div class="stat"><span>COMBO</span><strong id="combo">0</strong></div><div class="stat"><span>MAX COMBO</span><strong id="maxCombo">0</strong></div><div class="stat"><span>ACCURACY</span><strong id="accuracy">100.00%</strong></div><div class="stat"><span>JUDGEMENT</span><strong id="judgement">READY</strong></div>
+  </section>
+  <section class="game-layout">
+    <div class="game-shell">
+      <div class="game-meta"><div><strong id="songTitle">Scratch Steps</strong><small id="songInfo">120 BPM · 4 KEYS</small></div><div class="progress-wrap"><div id="progress"></div></div><span id="timeLabel">0:00 / 0:30</span></div>
+      <div id="game" class="game" tabindex="0" aria-label="FGHJキーで操作する音楽ゲーム">
+        <div class="lane-guides"><div class="lane" data-lane="0"><div class="lane-key">F</div></div><div class="lane" data-lane="1"><div class="lane-key">G</div></div><div class="lane" data-lane="2"><div class="lane-key">H</div></div><div class="lane" data-lane="3"><div class="lane-key">J</div></div></div>
+        <div id="notes" class="notes"></div><div class="hit-line"><span></span></div><div id="laneFlash" class="lane-flashes"></div>
+        <div id="countdown" class="overlay"><div class="overlay-card"><div class="big-symbol">FGHJ</div><h2 id="overlayTitle">準備できた？</h2><p id="overlayText">TAPも隣のキーへ擦ってOK！ HOLDとFLICKもあるよ。</p><button id="startButton" class="primary">START</button></div></div>
+        <div id="pauseOverlay" class="overlay hidden"><div class="overlay-card"><h2>PAUSED</h2><p>Spaceキーまたはボタンで再開</p><button id="resumeButton" class="primary">再開</button></div></div>
+      </div>
+      <div class="key-hints"><span><kbd>F</kbd> <kbd>G</kbd> <kbd>H</kbd> <kbd>J</kbd> キーで操作</span><span><i class="dot tap"></i>TAP <i class="dot hold"></i>HOLD <i class="dot flick"></i>FLICK</span><button id="pauseButton" class="text-button" disabled>一時停止 (Space)</button></div>
+    </div>
+    <aside class="side-panel">
+      <h2>HOW TO PLAY</h2>
+      <div class="how-item"><span class="note-icon tap-icon">●</span><div><strong>TAP / SCRATCH</strong><p>対応キーを押す。階段配置ではキーを押したまま隣のキーを押しても、次のTAPを取れる。</p></div></div>
+      <div class="how-item"><span class="note-icon hold-icon">━</span><div><strong>HOLD</strong><p>始点で押し、終点まで押し続ける。終点まで押せていれば成功。</p></div></div>
+      <div class="how-item"><span class="note-icon flick-icon">➜</span><div><strong>FLICK</strong><p>始点から指定方向の隣キーへ。始点を離して押し直しても、押したまま擦ってもOK。</p></div></div>
+      <div class="rule-box"><strong>FLICKの方向</strong><div class="direction-row"><kbd>F</kbd> → <kbd>G</kbd></div><div class="direction-row"><kbd>G</kbd> → <kbd>F</kbd> / <kbd>H</kbd></div><div class="direction-row"><kbd>H</kbd> → <kbd>G</kbd> / <kbd>J</kbd></div><div class="direction-row"><kbd>J</kbd> → <kbd>H</kbd></div><small>TAPの擦りは隣レーンへの入力で判定。FLICKは譜面で指定された方向への入力が必要。</small></div>
+      <div class="side-bottom"><label class="setting"><span>ノーツ速度</span><input id="speed" type="range" min="250" max="700" step="25" value="425"><b id="speedValue">425</b></label><label class="setting"><span>判定調整</span><input id="offset" type="range" min="-100" max="100" step="5" value="0"><b id="offsetValue">0 ms</b></label><button id="retryButton" class="secondary full">リトライ</button></div>
+    </aside>
+  </section>
+  <section id="chartPanel" class="chart-panel hidden"><div class="chart-panel-head"><div><h2>譜面JSON</h2><p>階段TAP、HOLD、FLICKを編集できます。timeは曲開始からの秒数。</p></div><button id="downloadChart" class="secondary">JSONを保存</button></div><textarea id="chartText" spellcheck="false" aria-label="譜面JSON"></textarea><div class="chart-actions"><button id="applyChart" class="primary">譜面を適用</button><span id="chartMessage" role="status"></span></div>
+    <details><summary>譜面形式</summary><pre>{
+  "title": "Scratch Steps",
+  "bpm": 120,
+  "duration": 30,
+  "notes": [
+    { "type": "tap", "lane": 0, "time": 2.0 },
+    { "type": "tap", "lane": 1, "time": 2.25 },
+    { "type": "hold", "lane": 2, "time": 3.0, "end": 4.0 },
+    { "type": "flick", "lane": 2, "to": 3, "time": 5.0 }
+  ]
+}</pre><p>lane: F=0, G=1, H=2, J=3。FLICKのtoもレーン番号。TAPは同時押しも可能。</p></details>
+  </section>
+  <footer>FGHJ RHYTHM · TAP SCRATCH ENABLED</footer>
+</main><script src="game.js"></script>
+</body></html>
